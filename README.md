@@ -1,6 +1,6 @@
 # Three-Class-Sentiment-Classifier
 
-## STEPS OF THREE CLASS SENTIMENT CLASSIFIER
+# STEPS OF THREE CLASS SENTIMENT CLASSIFIER
 
 1-Importing Required Libraries – Loaded all essential Python libraries for data processing, visualization, and model building.
 
