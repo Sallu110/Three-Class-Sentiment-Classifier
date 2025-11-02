@@ -1,6 +1,6 @@
 # Three-Class-Sentiment-Classifier
 
-# STEPS OF THREE CLASS SENTIMENT CLASSIFIER
+### STEPS OF THREE CLASS SENTIMENT CLASSIFIER
 
 1-Importing Required Libraries – Loaded all essential Python libraries for data processing, visualization, and model building.
 
@@ -29,3 +29,32 @@
 13-Evaluating the Neural Model – Tested the BiLSTM on unseen data and computed performance metrics.
 
 14-Error Analysis – Displayed five misclassified tweets and analyzed possible reasons for the errors.
+
+### Importing Required Libraries
+```
+import os, re, random
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import accuracy_score, f1_score, classification_report, confusion_matrix
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+from sklearn.preprocessing import LabelBinarizer
+```
+### Setting Random Seed and Data Path
+
+```
+RANDOM_SEED = 24
+np.random.seed(RANDOM_SEED)
+random.seed(RANDOM_SEED)
+
+DATA_PATH = "/content/k248015 Syed Muhammad Salman Rizvi - Twitter_Data.csv"
+```
+
+
+
+
+
