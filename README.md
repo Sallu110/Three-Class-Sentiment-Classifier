@@ -45,7 +45,7 @@ from tensorflow.keras import layers
 from sklearn.preprocessing import LabelBinarizer
 ```
 ### Setting Random Seed and Data Path
-
+#### Random seed is for same result reproducibility. So, that at every run same result could be produced.
 ```
 RANDOM_SEED = 24
 np.random.seed(RANDOM_SEED)
@@ -59,6 +59,7 @@ Reading the twitter dataset into the dataframe using pandas
 df = pd.read_csv(DATA_PATH)
 ```
 ### Encoding Sentiment Labels
+#### To make the labels suitable for training the model, it is converted into numerical form:
 ```
 label_map = {-1.0: 0, 0.0: 1, 1.0: 2}
 inv_label_map = {v: k for k, v in label_map.items()}
@@ -66,11 +67,17 @@ df["y"] = df["category"].map(label_map).astype(int)
 ```
 
 ### Handling Missing Data
+#### For data quality, rows with missing values in the column of category are removed and it is done by using follwing command
 ```
 df = df.dropna(subset=["category"]).copy()
 ```
 
 ### Text Cleaning and Preprocessing
+#### I wrote a text cleaning function to prepare the tweets for modelling. The preprocessing included:
+##### Converting all text to lowercase.
+##### Removing URLs and user mentions like @username.
+##### Keeping only alphabetic words and hashtags.
+##### Replacing multiple spaces with a single one.
 ```
 URL_RE = re.compile(r"http\S+|www\.\S+")
 MENTION_RE = re.compile(r"@\w+")
@@ -92,6 +99,7 @@ df.head()
 <img width="578" height="268" alt="image" src="https://github.com/user-attachments/assets/36a6a93b-7940-498a-8b44-f5e05432544c" />
 
 ### Splitting the Dataset
+#### Now, the dataset is split into training, validation and testing parts 
 ```
 from sklearn.model_selection import train_test_split
 
@@ -109,6 +117,7 @@ print(f"Train: {len(X_train)}, Val: {len(X_val)}, Test: {len(X_test)}")
 <img width="422" height="48" alt="image" src="https://github.com/user-attachments/assets/ed770998-db58-46ec-be4a-37f19bb5dd49" />
 
 ### Building Baseline Model
+#### For the baseline, I used the TF-IDF vectorizer along with a Multinomial Naive Bayes classifier.
 ```
 baseline = Pipeline([
     ("tfidf", TfidfVectorizer(
@@ -150,6 +159,7 @@ print("Confusion Matrix:\n", confusion_matrix(y_test, pred_test))
 
 
 ### Preparing Data for Neural Model
+#### This step converts text into numerical form using a vocabulary limit of 40,000 words and ensures all sequences are 64 tokens long. Unknown words are replaced with the <OOV> token, and class labels are transformed into one-hot vectors for the softmax layer.
 ```
 VOCAB_SIZE = 40000
 MAX_LEN = 64
@@ -173,6 +183,11 @@ yva = lb.transform(y_val)
 yte = lb.transform(y_test)
 ```
 ### Building BiLSTM Model
+#### A BiLSTM model is built to understand patterns and context in text data.
+#### It uses embedding and bidirectional LSTM layers to extract key text features.
+#### Dropout layers are applied to prevent the model from overfitting.
+#### Training is done with the Adam optimizer and categorical cross-entropy loss function.
+#### Early stopping observes validation loss and ends training after three epochs without improvement, keeping the best model version.
 ```
 # Build BiLSTM Model
 
@@ -200,6 +215,7 @@ callbacks = [
 ]
 ```
 ### Training the BiLSTM Model
+#### Now fitting the data into the BiLSTM model and training the model 
 ```
 history = model.fit(
     Xtr, ytr,
@@ -213,6 +229,7 @@ history = model.fit(
 <img width="1272" height="337" alt="image" src="https://github.com/user-attachments/assets/3e37cefe-3066-4499-857d-0cb940fd56f3" />
 
 ### Evaluating the Neural Model
+#### Finally, checking the performance of BiLSTEM model by classification report, Accuracy and f1-score
 ```
 probs = model.predict(Xte)
 y_pred = np.argmax(probs, axis=1)
