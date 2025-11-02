@@ -53,8 +53,13 @@ random.seed(RANDOM_SEED)
 
 DATA_PATH = "/content/k248015 Syed Muhammad Salman Rizvi - Twitter_Data.csv"
 ```
+### Loading the Dataset
+```
+Reading the twitter dataset into the dataframe using pandas 
+df = pd.read_csv(DATA_PATH)
+```
 
-
-
-
-
+### Handling Missing Data
+```
+df = df.dropna(subset=["category"]).copy()
+```
